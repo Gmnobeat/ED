@@ -44,7 +44,7 @@ void MostrarTXTCaracter(char NomeArq[50])//lendo caracter por caracter, send mai
 	fclose(PtrTxt);
 }
 //ou
-void MostrarTXTCaracter2(char NomeArq[50])//lendo linha por linha, sendo mais rapido
+void MostrarTXTString(char NomeArq[50])//lendo linha por linha, sendo mais rapido
 {
 	FILE * PtrTxt = fopen(NomeArq,"r");
 	char linha[100];
@@ -59,12 +59,54 @@ void MostrarTXTCaracter2(char NomeArq[50])//lendo linha por linha, sendo mais ra
 	fclose(PtrTxt);
 }
 
+void gravarCHR(char NomeArq[50])
+{
+	FILE *PtrTXT =fopen(NomeArq,"a");
+	char caracter;
+	clrscr();
+	printf("Digite o texto e pressione ESC para finalizar: \n");
+	caracter = getche(); // getche mostra
+	while(caracter != 27)
+	{
+		if(caracter==13)
+		{
+			fputc('\n',PtrTXT);
+			printf("\n");
+		}
+		else
+			fputc(caracter,PtrTXT);//variavel primeiro e depois o ponteiro
+		caracter = getche();
+	}
+	fclose(PtrTXT);
+}
+
+void gravarSTR(char NomeArq[50])
+{
+	FILE *PtrTXT =fopen(NomeArq,"a");
+	char frase[100];
+	clrscr();
+	printf("Digite o texto e pressione enter em uma linha vazia para finalizar: \n");
+	fflush(stdin);
+	gets(frase); // getche mostra
+	while(strcmp(frase,"\0") != 0)
+	{	
+		fputs(frase,PtrTXT);//variavel primeiro e depois o ponteiro
+		fputs("\n",PtrTXT);
+		fflush(stdin);
+		gets(frase);
+	}
+	fclose(PtrTXT);
+}
+
 int main (void)
 {
 	char NomeArq[50];
 	printf("\nNome Arquivo: ");
 	gets(NomeArq);
 	verificaArq(NomeArq);
-	MostrarTXTCaracter2(NomeArq);
+	//MostrarTXTCaracter(NomeArq);
+	//MostrarTXTString(NomeArq);
+	//gravarCHR(NomeArq);
+	gravarSTR(NomeArq);
 	return 0;
 }
