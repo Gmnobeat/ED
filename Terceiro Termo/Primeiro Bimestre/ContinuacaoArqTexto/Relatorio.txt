@@ -1,0 +1,11 @@
+		Relatorio
+---------------------------------
+Codigo	Descricao	Estoque	Preco
+---------------------------------
+2000	Produto2000	51	58
+1500	Produto1500	42	126
+3500	Produto3500	10	579
+8000	Produto8000	80	988
+---------------------------------
+Quantidade de Produtos: 183
+Preco Total de Produtos: R$ 93025.382813
