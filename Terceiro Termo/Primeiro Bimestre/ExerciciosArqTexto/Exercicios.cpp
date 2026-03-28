@@ -39,9 +39,49 @@ void Exercicio2 (char NomeArq[50])
 	fclose(PtrArq);
 }
 
-void Exercicio3(char NomeArq[50])
+void Exercicio3(void)
 {
-	
+	FILE* PtrArq1 = fopen("1Exercicio3.txt","r+");
+	FILE* PtrArq2 = fopen("2Exercicio3.txt","r+");
+	char car1,car2;
+	int cont=0;
+	car1 = fgetc(PtrArq1);
+	car2 = fgetc(PtrArq2);
+	while(!feof(PtrArq1) && !feof(PtrArq2))
+	{
+		if(car1 != car2)
+			cont++;
+		car1 = fgetc(PtrArq1);
+		car2 = fgetc(PtrArq2);
+	}
+	if(cont == 0 && feof(PtrArq1) && feof(PtrArq2))
+		printf("Os Arquivos Sao iguais\n");
+	else
+		printf("Os Arquivos Sao diferentes\n");
+	fclose(PtrArq1);
+	fclose(PtrArq2);
+}
+
+void Exercicio4(char NomeArq[50])
+{	
+	FILE *PtrArq = fopen(NomeArq,"r");
+	FILE *PtrPMai = fopen("PrimMaiu","w");
+	char caracter;
+	caracter = toupper(fgetc(PtrArq));
+	while(!feof(PtrArq))
+	{
+		fputc(caracter,PtrPMai);
+		if(caracter == 32)//32 e o espaço da tabela ascii
+			caracter = toupper(fgetc(PtrArq));
+		else	
+			caracter = fgetc(PtrArq);
+	}
+	fclose(PtrArq);
+	fclose(PtrPMai);	
+}
+
+void Exercicio5(void)
+{	
 	
 }
 
@@ -95,6 +135,21 @@ void VerificaAqr(char NomeArq[50])
 	}
 }
 
+void Exercicio5(void)
+{
+	FILE* PtrArq = fopen("Aposta.txt","w");
+	int n5=05,n15=15,n8=8,n22=22,n43=43,n53=53,n32=32,n10=10,n23=23,n16=16,n09=9,n44=44,n59=59,n07=07,n21=21,n29=29,n31=31,n1=01;
+	fprintf("+-----------------------------------------------------------------\n");
+	fprintf("|   Data   | N1 | N2 | N3 | N4 | N5 | N6 | N7 |\n");
+	fprintf("|----------|----|----|----|----|----|----|----|\n");
+	fprintf("|10/08/2012| %d | %d | %d | %d | %d | %d | %d |\n",n5, n15, n8, n22, n43, n53,n32);
+	fprintf("|10/08/2012| %d | %d | %d | %d | %d | %d | %d |\n",n10, n23, n43, n15, n16, n09, n44);
+	fprintf("|11/08/2012| %d | %d | %d | %d | %d | %d | %d |\n",n59, n32 ,n07, n8, n21, n29, n31);
+	fprintf("|11/08/2012| %d | %d | %d | %d | %d | %d | %d |\n",n23, n43, n15, n32, n07, n8, n01);
+	fprintf("+----------+----+----+----+----+----+----+----+\n");
+	fclose(PtrArq);
+}
+
 int main (void)
 {
 	char NomeArq[50];
@@ -118,7 +173,21 @@ int main (void)
 						printf("Executado com Sucesso\n");
 						getch();
 						break;
-			
+			case '3':	clrscr();
+						Exercicio3();
+						printf("Executado com Sucesso\n");
+						getch();
+						break;
+			case '4':	clrscr();
+						Exercicio4(NomeArq);
+						printf("Executado com Sucesso\n");
+						getch();
+						break;
+			case '5':	clrscr();
+						Exercicio5();
+						printf("Executado com Sucesso\n");
+						getch();
+						break;			
 		}
 	}while(op != '0');
 	return 0;
