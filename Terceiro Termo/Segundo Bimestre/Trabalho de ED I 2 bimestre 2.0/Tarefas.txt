@@ -1,0 +1,16 @@
+TipoRequisicao,TempoProcessamento,ID_Cliente,OrigemIP,TamanhoKB
+Tempo Real,10,Netflix_Stream,192.168.1.50,4500
+Requisicao API,5,Auth_Service,10.0.0.12,12
+Background,2,Log_Backup,172.16.5.4,890
+Tempo Real,15,Pix_Gate,192.168.1.110,8
+Requisicao API,8,DB_Query,10.0.0.15,150
+Background,3,App_Update,172.16.5.9,12000
+Tempo Real,12,Zoom_Call,192.168.1.22,2100
+Requisicao API,7,Cart_Checkout,10.0.0.12,45
+Background,4,Cloud_Sync,172.16.5.4,5600
+Tempo Real,20,Telemetry_AI,192.168.1.99,950
+Requisicao API,9,User_Profile,10.0.0.20,30
+Background,5,Analytics_Dump,172.16.5.12,8500
+Tempo Real,18,Live_Gaming,192.168.1.33,350
+Requisicao API,6,Session_Val,10.0.0.15,5
+Background,2,Mail_Queue,172.16.5.4,450
