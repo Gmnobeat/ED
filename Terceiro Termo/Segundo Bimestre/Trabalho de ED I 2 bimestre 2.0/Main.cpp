@@ -35,64 +35,94 @@ void verificaArq(char NomeArq[50])
 
 int Menu(void)
 {
-	printf("[1] Adicionar +1 Servidor\n");
+	printf("\n[1] Adicionar +1 Servidor\n");
 	printf("[2] Remover Servidor\n");
-	
+	printf("[Espaco] Avancar +1 Unidade de Tempo\n");
+	printf("[0] Sair e Exibir Relatorio\n");
+	printf("\nEscolha uma opcao: ");
 	return getche();
 }
 
 int main(void)
 {
-    TpDescritorCluster Cluster;
-    char NomeArq[50];
-    int op, UT = 0;
-    int Qtde_Servidores;
+    TpDescritorCluster Cluster;
+    char NomeArq[50];
+    int op, UT = 0;
+    int Qtde_Servidores;
 
-    printf("Digite o nome do Arq:\n");
-    gets(NomeArq);
-    verificaArq(NomeArq);
-    clrscr();
+    // --- VARIÁVEIS DE ESTATÍSTICA ALOCADAS LOCALMENTE NO MAIN ---
+    int TotalProcessadosPorTipo[4] = {0, 0, 0, 0}; 
+    int TempoEsperaTotalPorTipo[4] = {0, 0, 0, 0};
 
-    printf("Quantos Servidores serao utilizados?(max 3)\n");
-    scanf("%d", &Qtde_Servidores);
-    while(Qtde_Servidores > 3 || Qtde_Servidores <= 0)
-    {
-        printf("Essa Quantidade nao e valida\n");
-        scanf("%d", &Qtde_Servidores);
-    }
+    printf("Digite o nome do Arq:\n");
+    gets(NomeArq);
+    verificaArq(NomeArq);
+    clrscr();
+	
+    printf("Quantos Servidores serao utilizados?(max 3)\n");
+    scanf("%d", &Qtde_Servidores);
+    while(Qtde_Servidores > 3 || Qtde_Servidores <= 0)
+    {
+        printf("Essa Quantidade nao e valida\n");
+        scanf("%d", &Qtde_Servidores);
+    }
+	
+    InicializarCluster(Cluster);
+    AdicionarServidores(Cluster, Qtde_Servidores);
+	
+    FILE *Arq = fopen(NomeArq, "r");
+    char Lixo[256];
+    if (Arq != NULL)
+        fgets(Lixo, sizeof(Lixo), Arq); // Pula cabeçalho do arquivo
 
-    InicializarCluster(Cluster);
-    AdicionarServidores(Cluster, Qtde_Servidores);
+    do
+    {
+        clrscr();
+        printf("=== Unidade de Tempo Atual: %d ===\n", UT);
+        
+        MostrarSituacaoServidores(Cluster);
+        
+        op = Menu();
 
-    // abre o arquivo e pula o cabecalho
-    FILE *Arq = fopen(NomeArq, "r");
-    char Lixo[256];
-    fgets(Lixo, sizeof(Lixo), Arq);
+        switch(op)
+        {
+            case '1':	
+                if(Cluster.qtde < 3)
+                    AdicionarServidores(Cluster, 1);
+                else
+                    printf("\n[AVISO] Limite Maximo Excedido!\n");
+                printf("\nPressione qualquer tecla..."); getch();
+                break;
 
-    do
-    {
-        clrscr();
-        printf("=== Unidade de Tempo: %d ===\n", UT);
-        op = Menu();
+            case '2':	
+                if(Cluster.qtde <= 1)
+                    printf("\n[AVISO] Nao pode remover o unico servidor!\n");
+                else
+                    RemoverServidor(Cluster);
+                printf("\nPressione qualquer tecla..."); getch();
+                break;
 
-        switch(op)
-        {
-            case '1':
-                AdicionarServidores(Cluster, 1);
-                break;
+            case ' ': 
+                // Passando as variáveis locais criadas no main para a função tratá-las
+                ExecutarProcessamentoServidores(Cluster, UT, TotalProcessadosPorTipo, TempoEsperaTotalPorTipo);
+                
+                if(Arq != NULL && !feof(Arq))
+                    LerTarefaDoArquivo(Cluster, Arq, UT);
+                
+                UT++;
+                break;
+        }
 
-            case '2':
-                RemoverServidor(Cluster);
-                break;
-        }
+    } while(op != '0');
 
-        // a cada unidade de tempo le uma tarefa do arquivo
-        LerTarefaDoArquivo(Cluster, Arq);
+    if(Arq != NULL) fclose(Arq);
 
-        UT++;
+    // Passando as variáveis locais criadas no main para exibir as estatísticas
+    ExibirEstatisticasFinais(Cluster, TotalProcessadosPorTipo, TempoEsperaTotalPorTipo);
 
-    } while(op != '0' && !feof(Arq));
-
-    fclose(Arq);
-    return 0;
+    printf("\nSimulacao Terminada. Pressione qualquer tecla para fechar.\n");
+    getch();
+    return 0;
 }
+
+
